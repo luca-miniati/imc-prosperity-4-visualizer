@@ -1,4 +1,4 @@
-import { Slider, SliderProps, Text } from '@mantine/core';
+import { Slider, SliderProps, Text, NumberInput, Group } from '@mantine/core';
 import { useHotkeys } from '@mantine/hooks';
 import { ReactNode, useState } from 'react';
 import { AlgorithmDataRow } from '../../models.ts';
@@ -30,12 +30,26 @@ export function TimestampsCard(): ReactNode {
   }
 
   useHotkeys([
-    ['ArrowLeft', () => setTimestamp(timestamp === timestampMin ? timestamp : timestamp - timestampStep)],
-    ['ArrowRight', () => setTimestamp(timestamp === timestampMax ? timestamp : timestamp + timestampStep)],
+    ['ArrowLeft', () => setTimestamp(t => (t === timestampMin ? t : t - timestampStep))],
+    ['ArrowRight', () => setTimestamp(t => (t === timestampMax ? t : t + timestampStep))],
   ]);
 
   return (
     <VisualizerCard title="Timestamps">
+      <Group mb="sm">
+        <NumberInput
+          label="Timestamp"
+          value={timestamp}
+          min={timestampMin}
+          max={timestampMax}
+          step={timestampStep}
+          clampBehavior="strict"
+          onChange={(value) => {
+            if (typeof value === 'number') setTimestamp(value);
+          }}
+        />
+      </Group>
+
       <Slider
         min={timestampMin}
         max={timestampMax}

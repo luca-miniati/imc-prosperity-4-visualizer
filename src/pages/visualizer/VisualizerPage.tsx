@@ -7,7 +7,7 @@ import { AlgorithmSummaryCard } from './AlgorithmSummaryCard.tsx';
 import { ConversionPriceChart } from './ConversionPriceChart.tsx';
 import { EnvironmentChart } from './EnvironmentChart.tsx';
 import { PlainValueObservationChart } from './PlainValueObservationChart.tsx';
-import { PositionChart } from './PositionChart.tsx';
+import { PositionChart, PositionChartPercentOfLimit } from './PositionChart.tsx';
 import { ProductPriceChart } from './ProductPriceChart.tsx';
 import { ProfitLossChart } from './ProfitLossChart.tsx';
 import { TimestampsCard } from './TimestampsCard.tsx';
@@ -108,7 +108,7 @@ export function VisualizerPage(): ReactNode {
         <Grid.Col span={12}>
           <VisualizerCard>
             <Center>
-              <Title order={2}>Final Profit / Loss: {formatNumber(profitLoss)}</Title>
+              <Title order={2}>PnL: {formatNumber(profitLoss)}</Title>
             </Center>
           </VisualizerCard>
         </Grid.Col>
@@ -117,6 +117,12 @@ export function VisualizerPage(): ReactNode {
         </Grid.Col>
         <Grid.Col span={{ xs: 12, sm: 6 }}>
           <PositionChart symbols={sortedSymbols} />
+        </Grid.Col>
+        <Grid.Col span={{ xs: 12, sm: 6 }}>
+          <PositionChartPercentOfLimit symbols={sortedSymbols} />
+        </Grid.Col>
+        <Grid.Col span={{ xs: 12, sm: 6 }}>
+          <PositionChartPercentOfLimit symbols={sortedSymbols} />
         </Grid.Col>
         {symbolColumns}
         <Grid.Col span={12}>

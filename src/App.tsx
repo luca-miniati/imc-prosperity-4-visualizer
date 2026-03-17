@@ -10,22 +10,38 @@ import { HomePage } from './pages/home/HomePage.tsx';
 import { VisualizerPage } from './pages/visualizer/VisualizerPage.tsx';
 import { useStore } from './store.ts';
 
-const theme = createTheme({
+// const theme = createTheme({
+//   colors: {
+//     // Mantine 7.3.0 changes the dark colors to be more slightly lighter than they used to be
+//     // See https://mantine.dev/changelog/7-3-0/#improved-dark-color-scheme-colors for more information
+//     // The old dark colors offer better contrast between default text and background colors
+//     dark: [
+//       '#C1C2C5',
+//       '#A6A7AB',
+//       '#909296',
+//       '#5c5f66',
+//       '#373A40',
+//       '#2C2E33',
+//       '#25262b',
+//       '#1A1B1E',
+//       '#141517',
+//       '#101113',
+//     ],
+//   },
+// });
+export const theme = createTheme({
   colors: {
-    // Mantine 7.3.0 changes the dark colors to be more slightly lighter than they used to be
-    // See https://mantine.dev/changelog/7-3-0/#improved-dark-color-scheme-colors for more information
-    // The old dark colors offer better contrast between default text and background colors
     dark: [
-      '#C1C2C5',
-      '#A6A7AB',
-      '#909296',
-      '#5c5f66',
-      '#373A40',
-      '#2C2E33',
-      '#25262b',
-      '#1A1B1E',
-      '#141517',
-      '#101113',
+      '#D4D4D4', // primary text
+      '#bfbfbf',
+      '#a6a6a6',
+      '#8c8c8c',
+      '#6e6e6e',
+      '#3C3C3C', // borders
+      '#2D2D2D',
+      '#252526', // sidebar
+      '#1E1E1E', // editor background
+      '#151515',
     ],
   },
 });
@@ -39,7 +55,7 @@ const router = createBrowserRouter(
     </Route>,
   ),
   {
-    basename: '/imc-prosperity-3-visualizer/',
+    basename: '/imc-prosperity-4-visualizer/',
   },
 );
 

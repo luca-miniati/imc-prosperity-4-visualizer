@@ -31,5 +31,5 @@ export function ProfitLossTable({ timestamp }: ProfitLossTableProps): ReactNode 
       );
     });
 
-  return <SimpleTable label="profit / loss" columns={['Product', 'Profit / Loss']} rows={rows} />;
+  return <SimpleTable label="profit / loss" columns={['Product', 'PnL']} rows={rows} />;
 }

@@ -44,5 +44,5 @@ export function ProfitLossChart({ symbols }: ProfitLossChartProps): ReactNode {
     });
   });
 
-  return <Chart title="Profit / Loss" series={series} />;
+  return <Chart title="PnL" series={series} />;
 }

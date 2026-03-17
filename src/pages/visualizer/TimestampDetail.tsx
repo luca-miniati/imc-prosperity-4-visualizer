@@ -39,7 +39,7 @@ export function TimestampDetail({
       <Grid.Col span={12}>
         {/* prettier-ignore */}
         <Title order={5}>
-          Timestamp {formatNumber(state.timestamp)} • Profit / Loss: {formatNumber(profitLoss)} •
+          Current PnL: {formatNumber(profitLoss)},
           Conversions: {formatNumber(conversions)}
         </Title>
       </Grid.Col>
@@ -52,7 +52,7 @@ export function TimestampDetail({
         <PositionTable position={state.position} />
       </Grid.Col>
       <Grid.Col span={{ xs: 12, sm: 4 }}>
-        <Title order={5}>Profit / Loss</Title>
+        <Title order={5}>PnL</Title>
         <ProfitLossTable timestamp={state.timestamp} />
       </Grid.Col>
       {Object.entries(state.orderDepths).map(([symbol, orderDepth], i) => (
