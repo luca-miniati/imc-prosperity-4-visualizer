@@ -118,12 +118,6 @@ export function VisualizerPage(): ReactNode {
         <Grid.Col span={{ xs: 12, sm: 6 }}>
           <PositionChart symbols={sortedSymbols} />
         </Grid.Col>
-        <Grid.Col span={{ xs: 12, sm: 6 }}>
-          <PositionChartPercentOfLimit symbols={sortedSymbols} />
-        </Grid.Col>
-        <Grid.Col span={{ xs: 12, sm: 6 }}>
-          <PositionChartPercentOfLimit symbols={sortedSymbols} />
-        </Grid.Col>
         {symbolColumns}
         <Grid.Col span={12}>
           <TimestampsCard />

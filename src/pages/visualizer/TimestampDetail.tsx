@@ -1,5 +1,5 @@
-import { Grid, Text, Title } from '@mantine/core';
-import { ReactNode } from 'react';
+import { Grid, Text, Title, MultiSelect } from '@mantine/core';
+import { useState, ReactNode } from 'react';
 import { ScrollableCodeHighlight } from '../../components/ScrollableCodeHighlight.tsx';
 import { AlgorithmDataRow } from '../../models.ts';
 import { useStore } from '../../store.ts';
@@ -7,6 +7,7 @@ import { formatNumber } from '../../utils/format.ts';
 import { ConversionObservationsTable } from './ConversionObservationsTable.tsx';
 import { ListingsTable } from './ListingsTable.tsx';
 import { OrderDepthTable } from './OrderDepthTable.tsx';
+import { OrderDepthHistogram } from './OrderDepthHistogram.tsx';
 import { OrdersTable } from './OrdersTable.tsx';
 import { PlainValueObservationsTable } from './PlainValueObservationsTable.tsx';
 import { PositionTable } from './PositionTable.tsx';
@@ -34,6 +35,32 @@ export function TimestampDetail({
     .filter(row => row.timestamp === state.timestamp)
     .reduce((acc, val) => acc + val.profitLoss, 0);
 
+  const [selectedSymbols, setSelectedSymbols] = useState<string[]>(
+      Object.keys(state.orderDepths) // default: show all
+      );
+
+  const symbolOptions = Object.keys(state.orderDepths).map(symbol => ({
+    value: symbol,
+    label: symbol,
+  }));
+
+  function filterMapByKeys<T>(
+    map: Record<string, T> | undefined,
+    keysToKeep: string[]
+  ): Record<string, T> {
+    if (!map) return {};
+    return Object.fromEntries(
+      Object.entries(map).filter(([key]) => keysToKeep.includes(key))
+    );
+  }
+
+  const filteredListings = filterMapByKeys(state.listings, selectedSymbols);
+  const filteredPosition = filterMapByKeys(state.position, selectedSymbols);
+  const filteredOwnTrades = filterMapByKeys(state.ownTrades, selectedSymbols);
+  const filteredMarketTrades = filterMapByKeys(state.marketTrades, selectedSymbols);
+  const filteredOrders = filterMapByKeys(orders, selectedSymbols);
+  const filteredOrderDepths = filterMapByKeys(state.orderDepths, selectedSymbols);
+
   return (
     <Grid columns={12}>
       <Grid.Col span={12}>
@@ -43,38 +70,65 @@ export function TimestampDetail({
           Conversions: {formatNumber(conversions)}
         </Title>
       </Grid.Col>
-      <Grid.Col span={{ xs: 12, sm: 4 }}>
+
+      {/* Symbol Selector */}
+      <Grid.Col span={12}>
+        <MultiSelect
+          data={symbolOptions}
+          value={selectedSymbols}
+          onChange={setSelectedSymbols}
+          label="Filter order depths by symbol"
+          placeholder="Select symbols..."
+        />
+      </Grid.Col>
+
+      {/* Diagnostic Info */}
+      <Grid.Col span={4}>
         <Title order={5}>Listings</Title>
-        <ListingsTable listings={state.listings} />
+        <ListingsTable listings={filteredListings} />
       </Grid.Col>
-      <Grid.Col span={{ xs: 12, sm: 4 }}>
+      <Grid.Col span={4}>
         <Title order={5}>Positions</Title>
-        <PositionTable position={state.position} />
+        <PositionTable position={filteredPosition} />
       </Grid.Col>
-      <Grid.Col span={{ xs: 12, sm: 4 }}>
+      <Grid.Col span={4}>
         <Title order={5}>PnL</Title>
-        <ProfitLossTable timestamp={state.timestamp} />
+        <ProfitLossTable timestamp={state.timestamp} symbols={selectedSymbols} />
       </Grid.Col>
-      {Object.entries(state.orderDepths).map(([symbol, orderDepth], i) => (
-        <Grid.Col key={i} span={{ xs: 12, sm: 4 }}>
-          <Title order={5}>{symbol} order depth</Title>
-          <OrderDepthTable orderDepth={orderDepth} />
-        </Grid.Col>
+
+
+      {/* Order Depth Vis */}
+      {Object.entries(state.orderDepths)
+        .filter(([symbol]) => selectedSymbols.includes(symbol))
+        .map(([symbol, orderDepth], i) => (
+          <Grid.Col key={i} span={12}>
+            <Title order={5}>{symbol} order depth</Title>
+            <Grid columns={12}>
+              <Grid.Col span={6}>
+                <OrderDepthTable orderDepth={orderDepth} />
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <OrderDepthHistogram orderDepth={orderDepth} />
+              </Grid.Col>
+            </Grid>
+          </Grid.Col>
       ))}
-      {Object.keys(state.orderDepths).length % 3 <= 2 && <Grid.Col span={{ xs: 12, sm: 4 }} />}
-      {Object.keys(state.orderDepths).length % 3 <= 1 && <Grid.Col span={{ xs: 12, sm: 4 }} />}
+
+      {/* Trade Info */}
       <Grid.Col span={{ xs: 12, sm: 4 }}>
         <Title order={5}>Own trades</Title>
-        {<TradesTable trades={state.ownTrades} />}
+        <TradesTable trades={filteredOwnTrades} />
       </Grid.Col>
       <Grid.Col span={{ xs: 12, sm: 4 }}>
         <Title order={5}>Market trades</Title>
-        {<TradesTable trades={state.marketTrades} />}
+        <TradesTable trades={filteredMarketTrades} />
       </Grid.Col>
       <Grid.Col span={{ xs: 12, sm: 4 }}>
         <Title order={5}>Orders</Title>
-        {<OrdersTable orders={orders} />}
+        <OrdersTable orders={filteredOrders} />
       </Grid.Col>
+
+      {/* Logs */}
       <Grid.Col span={{ xs: 12, sm: 4 }}>
         <Title order={5}>Plain value observations</Title>
         <PlainValueObservationsTable plainValueObservations={state.observations.plainValueObservations} />

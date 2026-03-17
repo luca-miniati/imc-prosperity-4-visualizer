@@ -216,11 +216,8 @@ function getAlgorithmData(parsed: object): AlgorithmDataRow[] {
 
 export function parseAlgorithmLogs(logs: string, summary?: AlgorithmSummary): Algorithm {
   const parsed = JSON.parse(logs);
-
   const activityLogs = getActivityLogs(parsed['activitiesLog'].split('\n'));
-
   const data = getAlgorithmData(parsed);
-
   if (activityLogs.length === 0 && data.length === 0) {
     throw new AlgorithmParseError(
       (
