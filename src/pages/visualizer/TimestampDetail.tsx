@@ -8,6 +8,7 @@ import { ConversionObservationsTable } from './ConversionObservationsTable.tsx';
 import { ListingsTable } from './ListingsTable.tsx';
 import { OrderDepthTable } from './OrderDepthTable.tsx';
 import { OrderDepthHistogram } from './OrderDepthHistogram.tsx';
+import { OrderBookStatsTable } from './OrderBookStatsTable.tsx';
 import { OrdersTable } from './OrdersTable.tsx';
 import { PlainValueObservationsTable } from './PlainValueObservationsTable.tsx';
 import { PositionTable } from './PositionTable.tsx';
@@ -98,16 +99,23 @@ export function TimestampDetail({
 
 
       {/* Order Depth Vis */}
+
+      {/*
+      */}
       {Object.entries(state.orderDepths)
         .filter(([symbol]) => selectedSymbols.includes(symbol))
         .map(([symbol, orderDepth], i) => (
           <Grid.Col key={i} span={12}>
             <Title order={5}>{symbol} order depth</Title>
             <Grid columns={12}>
-              <Grid.Col span={6}>
+
+              <Grid.Col span={4}>
+                <OrderBookStatsTable orderDepth={orderDepth} />
+              </Grid.Col>
+              <Grid.Col span={4}>
                 <OrderDepthTable orderDepth={orderDepth} />
               </Grid.Col>
-              <Grid.Col span={6}>
+              <Grid.Col span={4}>
                 <OrderDepthHistogram orderDepth={orderDepth} />
               </Grid.Col>
             </Grid>
